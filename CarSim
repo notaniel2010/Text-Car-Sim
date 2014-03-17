@@ -1,0 +1,197 @@
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+
+public class CarSim extends JFrame implements ActionListener
+{
+    // instance variables - replace the example below with your own
+    
+    private double gasTank, gasTankLevel, odometer, mpg, GasPrice, BankAccount;
+    private String name;
+    private String model;
+    private String brand;
+    private JButton Drive;
+    private double miles, AmmountTillFull;
+    private JButton FillGasTank;
+    private JTextArea GasLevel;
+    private JButton RunTillBroke;
+    private JTextArea CGL;
+    private JTextArea Baccount;
+    private JTextArea Odom;
+    private JTextArea Warn;
+    private JTextArea Gallons;
+    private JTextArea ATF;
+    private JTextArea GASPRICE;
+    
+
+    
+    public CarSim( String n, String b, String m, double MP, double GT)
+    {
+       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new GridLayout(0,3));
+        setTitle("CarSim");
+        setSize(800, 800);
+        name = n;
+        model = m;
+        gasTank = GT;
+        mpg = MP;
+        brand = b;
+        AmmountTillFull = 0;
+        
+       
+       gasTankLevel = (gasTank/25)*100;
+       odometer = 0;
+       BankAccount = (double)(Math.random()*150) + 100;
+       
+       Drive = new JButton ("Drive");
+       add (Drive);
+       Drive.addActionListener(this);
+       
+       FillGasTank = new JButton ("Fill Gas Tank");
+       add (FillGasTank);
+       FillGasTank.addActionListener(this);
+                   
+       RunTillBroke = new JButton ("Run Until Broke");
+       add (RunTillBroke);
+       RunTillBroke.addActionListener(this);
+       
+       CGL = new JTextArea(" Gas Level ");
+       add (CGL);
+              
+       Baccount = new JTextArea("Bank Account");
+       add (Baccount);
+       
+       Odom = new JTextArea("Miles Driven");
+       add (Odom);
+       
+       Gallons = new JTextArea("Gallons in the Tank");
+       add (Gallons);
+       
+       ATF = new JTextArea("Gallons untill full");
+       add(ATF);
+       
+       GASPRICE = new JTextArea("Gas Price");
+       add(GASPRICE);
+       
+       Warn = new JTextArea(" Not Enough Gas, Buy More");
+       add (Warn);
+       
+       
+       GASPRICE.setVisible(true);
+       ATF.setVisible(true);
+       Gallons.setVisible(true);
+       Odom.setVisible(true);
+       Baccount.setVisible(true);
+       CGL.setVisible(true);
+       RunTillBroke.setVisible(true);
+       FillGasTank.setVisible(true);
+       Drive.setVisible(true);
+       Warn.setVisible(false);
+       
+       validate();
+       setVisible(true);
+        
+    }
+
+    
+    public void Drive()
+    {
+        miles = (double)(Math.random()*40) + 10;
+        if ( mpg * gasTank > miles)
+        {
+          odometer = odometer + miles;
+          gasTank = gasTank - (miles/mpg);
+          AmmountTillFull = (25-gasTank);
+          ATF.setText(+AmmountTillFull+" Gallons Unitl Full");
+          Odom.setText(+odometer+" Miles Driven");
+          gasTankLevel = (gasTank/25)*100;
+          CGL.setText(+gasTankLevel+ "%  Full");
+          Gallons.setText(+gasTank+ " Gallons Left");
+          Baccount.setText("$ " +BankAccount+ " Left");
+        }
+        else 
+        { 
+         Warn.setVisible(true);   
+        }
+            
+        
+    }
+    
+ 
+    
+    public void RunTillBroke()
+    {
+        GasPrice = (double)(Math.random()*1.15) + 2.85;
+        miles = ((BankAccount/GasPrice)*mpg)+ (mpg * gasTank);
+        BankAccount = BankAccount - (GasPrice*(BankAccount/GasPrice));
+        odometer = odometer + miles;
+        gasTank = 0;
+        AmmountTillFull = (25-gasTank);
+        ATF.setText(+AmmountTillFull+" Gallons Unitl Full");
+        Odom.setText(+odometer+" Miles Driven");
+        gasTankLevel = (gasTank/25)*100;
+        CGL.setText(+gasTankLevel+ " % Full");
+        Gallons.setText(+gasTank+ " Gallons Left");
+        GASPRICE.setText(" $ " +GasPrice+ " Per Gallon");
+        if (BankAccount < 0.0E-15)
+        {
+            BankAccount = 0;
+        }
+        Baccount.setText("$ " +BankAccount+ " Left");
+        Warn.setVisible(true);
+    }
+    
+    
+    public void FillGasTank()
+    {
+        GasPrice = (double)(Math.random()*1.15) + 2.85;
+        if (BankAccount > 0)
+      {
+        
+        if  ( gasTank < 25.00000000000)
+        {
+            if (BankAccount > (AmmountTillFull * GasPrice))
+            {
+            gasTank = 25;
+            BankAccount = BankAccount - (GasPrice * AmmountTillFull);
+            gasTankLevel = (gasTank/25)*100;
+            CGL.setText(+gasTankLevel+ " % Full");
+            Gallons.setText(+gasTank+ " Gallons Left");
+            Baccount.setText("$ " +BankAccount+ " Left");
+            AmmountTillFull = (25-gasTank);
+            ATF.setText(+AmmountTillFull+" Gallons Until Full");
+            Warn.setVisible(false);
+            GASPRICE.setText( " $ "+GasPrice+ " Per Gallon");
+            } 
+            else 
+            {
+            gasTank = gasTank + (BankAccount/GasPrice);
+            BankAccount = BankAccount - (AmmountTillFull * GasPrice);
+            gasTankLevel = (gasTank/25)*100;
+            CGL.setText(+gasTankLevel+ " % Full");
+            Gallons.setText(+gasTank+ " Gallons Left");
+            Baccount.setText("$ " +BankAccount+ " Left");
+            AmmountTillFull = (25-gasTank);
+            ATF.setText(+AmmountTillFull+" Gallons Unitl Full");
+            GASPRICE.setText(" $ "+GasPrice+ " Per Gallon");
+            }
+        }
+            
+        else
+            {
+                gasTank = gasTank;
+            }
+      }
+      }     
+    
+       
+    public void actionPerformed(ActionEvent event)
+    {
+        if (event.getSource() == Drive) Drive();
+        if (event.getSource() == FillGasTank) FillGasTank();
+        if (event.getSource() == RunTillBroke) RunTillBroke();
+    }
+    
+}
