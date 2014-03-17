@@ -1,0 +1,13 @@
+import javax.swing.*;
+import java.io.IOException;
+
+
+
+public class MainCode  
+{
+    
+    CarSim Car1 = new CarSim("Nathaniel", "Ford", "Focus-Rally", 35, 25);
+    
+    
+
+}
